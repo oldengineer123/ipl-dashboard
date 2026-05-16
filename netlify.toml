@@ -1,0 +1,8 @@
+[build]
+  publish = "."
+  command = ""   # no build step — dashboard.html is pre-built by GitHub Actions
+
+[[redirects]]
+  from = "/"
+  to   = "/dashboard.html"
+  status = 200

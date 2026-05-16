@@ -1,0 +1,32 @@
+name: Update IPL Dashboard
+
+on:
+  schedule:
+    - cron: '30 0 * * *'   # 12:30 AM UTC = 6:00 AM IST, runs daily
+  workflow_dispatch:         # allows manual trigger from GitHub Actions tab
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download data and rebuild dashboard
+        run: python3 update_data.py
+
+      - name: Commit and push if dashboard changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html build/
+          git diff --staged --quiet && echo "No changes to commit." || (
+            git commit -m "Auto-update: $(date -u '+%Y-%m-%d')"
+            git push
+          )
