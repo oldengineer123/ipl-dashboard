@@ -204,7 +204,7 @@ tbody tr:last-child td{border-bottom:none}
 tbody td.numeric{text-align:right;font-variant-numeric:tabular-nums}
 tbody tr:hover{background:var(--hover)}
 tbody td.rank{color:var(--text-muted);font-variant-numeric:tabular-nums;width:48px}
-tbody td.player{font-weight:500}
+tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ---- Better/worse indicator colours (bowling SR / avg) ---- */
 .good{color:#15803d}
