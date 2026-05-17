@@ -35,37 +35,51 @@ HTML_TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
 <title>IPL Dashboard</title>
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0}
 :root{
-  --bg:#fafafa;
-  --surface:#fff;
-  --border:#e7e7e7;
-  --border-strong:#d4d4d4;
-  --text:#171717;
-  --text-muted:#737373;
-  --accent:#15803d;
-  --accent-hover:#166534;
-  --accent-bg:#f0fdf4;
-  --hover:#f5f5f5;
-  --shadow:0 1px 2px 0 rgb(0 0 0 / .04);
-  --shadow-pop:0 6px 20px rgb(0 0 0 / .08);
+  --navy:#080c17;
+  --panel:#0f1623;
+  --card:#171e2e;
+  --border:rgba(255,255,255,0.07);
+  --border-strong:rgba(255,255,255,0.12);
+  --gold:#f4a72b;
+  --gold-dim:rgba(244,167,43,0.12);
+  --teal:#2dd4bf;
+  --teal-dim:rgba(45,212,191,0.10);
+  --muted:#64748b;
+  --text:#e2e8f0;
+  --subtext:#94a3b8;
+  /* keep these aliases for backwards compat */
+  --bg:#080c17;
+  --surface:#171e2e;
+  --accent:#f4a72b;
+  --accent-hover:#e09620;
+  --accent-bg:rgba(244,167,43,0.12);
+  --hover:rgba(255,255,255,0.04);
+  --text-muted:#64748b;
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-pop:0 6px 20px rgba(0,0,0,0.5);
 }
 html,body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  font-family:'DM Sans',sans-serif;
   color:var(--text);background:var(--bg);font-size:14px;line-height:1.5;
 }
 
 /* ---- Header ---- */
 header{
-  background:var(--surface);border-bottom:1px solid var(--border);
-  padding:1rem 2rem;display:flex;align-items:center;
-  justify-content:space-between;flex-wrap:wrap;gap:.75rem
+  background:var(--panel);border-bottom:1px solid var(--border);
+  padding:0 2rem;display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:.75rem;height:58px;
+  position:sticky;top:0;z-index:100;flex-shrink:0
 }
-header h1{margin:0;font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
-header .subtitle{color:var(--text-muted);font-size:.8rem;margin-top:.1rem}
+header .subtitle{color:var(--text-muted);font-size:.8rem}
+.logo{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;letter-spacing:0.06em;color:var(--gold);display:flex;align-items:center;gap:8px;white-space:nowrap;margin-right:1rem}
+.logo span{color:var(--text);font-weight:500}
+.logo-pip{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
 
 /* ---- Tab bar ---- */
 .tab-bar{display:flex;background:var(--hover);border-radius:8px;padding:3px;gap:2px}
@@ -75,10 +89,7 @@ header .subtitle{color:var(--text-muted);font-size:.8rem;margin-top:.1rem}
   font-family:inherit;transition:all .15s;white-space:nowrap;
 }
 .tab-btn:hover{color:var(--text)}
-.tab-btn.active{
-  background:var(--surface);color:var(--text);
-  box-shadow:0 1px 3px rgb(0 0 0/.1),0 1px 2px rgb(0 0 0/.06);
-}
+.tab-btn.active{background:var(--gold-dim);color:var(--gold);box-shadow:none}
 
 /* ---- Main layout ---- */
 main{max-width:1400px;margin:0 auto;padding:1.5rem 2rem}
@@ -148,7 +159,7 @@ main{max-width:1400px;margin:0 auto;padding:1.5rem 2rem}
 /* ---- Number inputs ---- */
 .number-input{
   padding:.45rem .55rem;border:1px solid var(--border-strong);border-radius:8px;
-  font-size:.8125rem;font-family:inherit;background:var(--surface)
+  font-size:.8125rem;font-family:inherit;background:var(--surface);color:var(--text)
 }
 .number-input:focus{outline:2px solid var(--accent);outline-offset:-1px}
 
@@ -162,12 +173,9 @@ main{max-width:1400px;margin:0 auto;padding:1.5rem 2rem}
 .muted-sep{color:var(--text-muted);font-size:.8125rem}
 
 /* ---- Results card ---- */
-.results-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:12px;overflow:hidden;box-shadow:var(--shadow)
-}
+.results-card{background:var(--card);border:1px solid var(--border);border-radius:10px}
 .results-header{
-  padding:.85rem 1.5rem;border-bottom:1px solid var(--border);
+  padding:.85rem 1.5rem;border-bottom:1px solid var(--border);background:transparent;
   display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:.75rem
 }
@@ -187,22 +195,22 @@ main{max-width:1400px;margin:0 auto;padding:1.5rem 2rem}
 /* ---- Table ---- */
 table{width:100%;border-collapse:collapse;font-size:.875rem}
 thead th{
-  text-align:left;padding:.6rem 1rem;background:#fafafa;
+  text-align:left;padding:.6rem 1rem;background:rgba(0,0,0,0.25);
   border-bottom:1px solid var(--border);font-weight:600;
-  color:var(--text-muted);font-size:.7rem;text-transform:uppercase;
+  color:var(--muted);font-size:.7rem;text-transform:uppercase;
   letter-spacing:.06em;position:sticky;top:0;cursor:pointer;
   user-select:none;white-space:nowrap;z-index:1
 }
 thead th.numeric{text-align:right}
 thead th .sort-arrow{display:inline-block;margin-left:.25rem;opacity:.25}
-thead th.sorted{color:var(--text)}
-thead th.sorted .sort-arrow{opacity:1;color:var(--accent)}
+thead th.sorted{color:var(--gold)}
+thead th.sorted .sort-arrow{color:var(--gold);opacity:1}
 thead th[data-static]{cursor:default}
 
-tbody td{padding:.5rem 1rem;border-bottom:1px solid var(--border)}
+tbody td{padding:.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04)}
 tbody tr:last-child td{border-bottom:none}
 tbody td.numeric{text-align:right;font-variant-numeric:tabular-nums}
-tbody tr:hover{background:var(--hover)}
+tbody tr:hover{background:rgba(255,255,255,0.04)}
 tbody td.rank{color:var(--text-muted);font-variant-numeric:tabular-nums;width:48px}
 tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -211,20 +219,23 @@ tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;o
 .bad{color:#b91c1c}
 
 .empty,.loading{padding:3rem 2rem;text-align:center;color:var(--text-muted)}
-.footnote{
-  padding:.75rem 1.5rem;font-size:.75rem;color:var(--text-muted);
-  border-top:1px solid var(--border);background:#fafafa;line-height:1.6
-}
+.footnote{background:rgba(0,0,0,0.2);border-top:1px solid var(--border);color:var(--muted);padding:.75rem 1.5rem;font-size:.75rem;line-height:1.6}
 /* ---- KPI Strip ---- */
 .kpi-strip{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
-.kpi{
-  background:var(--surface);border:1px solid var(--border);border-radius:12px;
-  padding:1rem 1.5rem;flex:1;min-width:110px;box-shadow:var(--shadow);text-align:center
-}
-.kpi-val{font-size:1.75rem;font-weight:700;line-height:1.2;color:var(--text)}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 18px 14px;flex:1;min-width:110px;text-align:center;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.kpi-g::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.kpi.kpi-t::after{background:linear-gradient(90deg,var(--teal),transparent)}
+.kpi.kpi-r::after{background:linear-gradient(90deg,#fb7185,transparent)}
+.kpi.kpi-p::after{background:linear-gradient(90deg,#a78bfa,transparent)}
+.kpi-val{font-family:'Rajdhani',sans-serif;font-size:2rem;font-weight:700;line-height:1.1;color:var(--text)}
 .kpi-val.win{color:var(--accent)}
-.kpi-val.lose{color:#b91c1c}
-.kpi-label{font-size:.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.25rem}
+.kpi-val.lose{color:#fb7185}
+.kpi.kpi-g .kpi-val{color:var(--gold)}
+.kpi.kpi-t .kpi-val{color:var(--teal)}
+.kpi.kpi-r .kpi-val{color:#fb7185}
+.kpi.kpi-p .kpi-val{color:#a78bfa}
+.kpi-label{font-size:.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.4rem}
 .kpi-empty{color:var(--text-muted);padding:2rem;text-align:center;width:100%;font-size:.875rem}
 /* ---- Sub-tab bar ---- */
 .subtab-bar{
@@ -297,18 +308,57 @@ tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;o
 .team-single-select{
   padding:.45rem .8rem;border:1px solid var(--border-strong);border-radius:8px;
   background:var(--surface);font-size:.8125rem;font-family:inherit;
-  cursor:pointer;min-width:240px
+  cursor:pointer;min-width:240px;color:var(--text)
 }
 .team-single-select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+/* ---- Player avatar ---- */
+.pcell{display:flex;align-items:center;gap:8px}
+.av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;font-family:'Rajdhani',sans-serif}
+tbody td.player{width:200px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---- Inline bar sparklines ---- */
+.num-hi{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--gold)}
+tbody td.sorted-col{background:rgba(244,167,43,0.04);text-align:left}
+thead th.numeric.sorted{text-align:left}
+.bar-wrap{display:flex;align-items:center;margin-top:3px;justify-content:flex-start}
+.bar{height:3px;background:var(--teal);border-radius:2px;opacity:0.7;min-width:2px}
+
+/* ---- App layout: sidebar + content ---- */
+.app-layout{display:flex;height:calc(100vh - 58px);overflow:hidden}
+.sidebar{
+  width:256px;min-width:256px;background:var(--panel);border-right:1px solid var(--border);
+  overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0;flex-shrink:0
+}
+.content-area{flex:1;overflow-y:auto;padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1rem;min-width:0}
+/* Override filter styling in sidebar - make borderless and vertical */
+.sidebar .filters{
+  background:transparent;border:none;border-radius:0;padding:0 0 1rem 0;
+  box-shadow:none;border-bottom:1px solid var(--border);margin-bottom:1rem
+}
+.sidebar .filters:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.sidebar .filter-row{flex-direction:column;gap:.75rem;margin-bottom:.75rem;align-items:flex-start}
+.sidebar .filter-row:last-child{margin-bottom:0}
+.sidebar .filter-group{min-width:0;flex:none;width:100%;text-align:left}
+.sidebar .dropdown-toggle{min-width:0;width:100%;text-align:left}
+.sidebar .chip-row{max-height:120px;overflow-y:auto}
+.sidebar .button-group{display:flex;flex-wrap:wrap;gap:2px}
+.sidebar .button-group button{flex:0 0 auto;font-size:.75rem;padding:.35rem .55rem;white-space:nowrap}
+/* Sidebar section label divider */
+.sidebar-section-title{
+  font-size:.65rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:.6rem;padding-top:.25rem
+}
+main{display:none}
 
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>IPL Dashboard</h1>
-    <div class="subtitle" id="subtitle"></div>
+  <div class="logo">
+    <div class="logo-pip"></div>
+    IPL<span>Metrics</span>
   </div>
   <nav class="tab-bar" id="tab-bar">
     <button class="tab-btn active" data-tab="batting">Batting</button>
@@ -317,129 +367,121 @@ tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;o
     <button class="tab-btn" data-tab="fielding">Fielding</button>
     <button class="tab-btn" data-tab="player">Player</button>
   </nav>
+  <div class="subtitle" id="subtitle"></div>
   <button class="text-button" id="reset-button">Reset filters</button>
 </header>
 
-<main>
+<div class="app-layout">
+  <aside class="sidebar">
 
-  <!-- ===== SHARED FILTERS: Seasons / Innings / Overs / Venue ===== -->
-  <section class="filters" id="shared-filters">
-    <div class="filter-row">
-      <div class="filter-group" style="flex:1;min-width:280px">
-        <span class="label">Seasons</span>
-        <div class="chip-row" id="seasons-chips"></div>
-      </div>
-    </div>
-    <div class="filter-row">
-      <div class="filter-group">
-        <span class="label" id="innings-label">Innings</span>
-        <div class="button-group" id="innings-toggle">
-          <button data-value="all" class="active">All</button>
-          <button data-value="1" id="inn-btn-1">Batting 1st</button>
-          <button data-value="2" id="inn-btn-2">Chasing</button>
-        </div>
-      </div>
-      <div class="filter-group" style="min-width:380px">
-        <span class="label">Overs</span>
-        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-          <div class="button-group" id="over-presets">
-            <button data-min="1" data-max="20" class="active">All</button>
-            <button data-min="1" data-max="6">Powerplay</button>
-            <button data-min="7" data-max="15">Middle</button>
-            <button data-min="16" data-max="20">Death</button>
+    <!-- batting/bowling filters -->
+    <div id="sidebar-batbowl">
+
+      <!-- ===== SHARED FILTERS: Seasons / Innings / Overs / Venue ===== -->
+      <section class="filters" id="shared-filters">
+        <div class="filter-row">
+          <div class="filter-group" style="flex:1;min-width:0">
+            <span class="label">Seasons</span>
+            <div class="chip-row" id="seasons-chips"></div>
           </div>
-          <span class="muted-sep">or</span>
-          <input type="number" id="over-min" class="number-input" min="1" max="20" value="1" style="width:64px">
-          <span class="muted-sep">to</span>
-          <input type="number" id="over-max" class="number-input" min="1" max="20" value="20" style="width:64px">
         </div>
-      </div>
-      <div class="filter-group">
-        <span class="label">Venue</span>
-        <div class="dropdown" data-key="venue"></div>
-      </div>
-    </div>
-  </section>
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="label" id="innings-label">Innings</span>
+            <div class="button-group" id="innings-toggle">
+              <button data-value="all" class="active">All</button>
+              <button data-value="1" id="inn-btn-1">Batting 1st</button>
+              <button data-value="2" id="inn-btn-2">Chasing</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Overs</span>
+            <div style="display:flex;flex-direction:column;gap:.4rem">
+              <div class="button-group" id="over-presets">
+                <button data-min="1" data-max="20" class="active">All</button>
+                <button data-min="1" data-max="6">Powerplay</button>
+                <button data-min="7" data-max="15">Middle</button>
+                <button data-min="16" data-max="20">Death</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:.25rem">
+                <input type="number" id="over-min" class="number-input" min="1" max="20" value="1" style="width:52px">
+                <span class="muted-sep">–</span>
+                <input type="number" id="over-max" class="number-input" min="1" max="20" value="20" style="width:52px">
+              </div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Venue</span>
+            <div class="dropdown" data-key="venue"></div>
+          </div>
+        </div>
+      </section>
 
-  <!-- ===== BATTING-SPECIFIC FILTERS ===== -->
-  <section class="filters" id="bat-filters">
-    <div class="filter-row">
-      <div class="filter-group">
-        <span class="label">Min balls faced</span>
-        <input type="number" id="min-balls" class="number-input" min="0" value="100" style="width:90px">
-      </div>
-      <div class="filter-group">
-        <span class="label">Opposition (bowling team)</span>
-        <div class="dropdown" data-key="opposition"></div>
-      </div>
-      <div class="filter-group">
-        <span class="label">Batter's team</span>
-        <div class="dropdown" data-key="bat_team"></div>
-      </div>
-      <div class="filter-group" style="flex:1;min-width:220px">
+      <!-- ===== BATTING-SPECIFIC FILTERS ===== -->
+      <section class="filters" id="bat-filters">
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="label">Min balls faced</span>
+            <input type="number" id="min-balls" class="number-input" min="0" value="100" style="width:90px">
+          </div>
+          <div class="filter-group">
+            <span class="label">Opposition (bowling team)</span>
+            <div class="dropdown" data-key="opposition"></div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Batter's team</span>
+            <div class="dropdown" data-key="bat_team"></div>
+          </div>
+          <div class="filter-group" style="flex:1;min-width:0">
         <span class="label">Bowler</span>
         <div class="dropdown" data-key="bowler"></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== BOWLING-SPECIFIC FILTERS ===== -->
-  <section class="filters" id="bowl-filters" style="display:none">
-    <div class="filter-row">
-      <div class="filter-group">
-        <span class="label">Min balls bowled</span>
-        <input type="number" id="min-balls-bowl" class="number-input" min="0" value="120" style="width:90px">
-      </div>
-      <div class="filter-group">
-        <span class="label">Opposition (batting team)</span>
-        <div class="dropdown" data-key="bowl_opposition"></div>
-      </div>
-      <div class="filter-group">
-        <span class="label">Bowler's team</span>
-        <div class="dropdown" data-key="bowl_team"></div>
-      </div>
-      <div class="filter-group" style="flex:1;min-width:220px">
-        <span class="label">Batter</span>
-        <div class="dropdown" data-key="batter_filter"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== RESULTS ===== -->
-  <section class="results-card" id="main-results">
-    <div class="results-header">
-      <div class="results-count" id="results-count">Loading data…</div>
-      <div class="player-search-wrap">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="search" id="player-search" class="player-search" placeholder="Find player…" autocomplete="off">
-      </div>
-      <div class="muted-sep" id="results-meta"></div>
-    </div>
-    <div class="table-wrap" id="table-wrap">
-      <div class="loading">Parsing data…</div>
-    </div>
-    <div class="footnote" id="footnote"></div>
-  </section>
-
-  <!-- ===== TEAMS SECTION ===== -->
-  <div id="teams-section" style="display:none">
-
-    <section class="filters" id="team-top-filters">
-      <div class="filter-row">
-        <div class="filter-group">
-          <span class="label">Team</span>
-          <div style="display:flex;align-items:center;gap:.6rem">
-            <span id="team-logo-preview" style="display:none"></span>
-            <select class="team-single-select" id="team-picker">
-              <option value="-1">— pick a team —</option>
-            </select>
+      <!-- ===== BOWLING-SPECIFIC FILTERS ===== -->
+      <section class="filters" id="bowl-filters" style="display:none">
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="label">Min balls bowled</span>
+            <input type="number" id="min-balls-bowl" class="number-input" min="0" value="120" style="width:90px">
+          </div>
+          <div class="filter-group">
+            <span class="label">Opposition (batting team)</span>
+            <div class="dropdown" data-key="bowl_opposition"></div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Bowler's team</span>
+            <div class="dropdown" data-key="bowl_team"></div>
+          </div>
+          <div class="filter-group" style="flex:1;min-width:0">
+            <span class="label">Batter</span>
+            <div class="dropdown" data-key="batter_filter"></div>
           </div>
         </div>
-        <div class="filter-group" style="flex:1;min-width:280px">
-          <span class="label">Seasons</span>
-          <div class="chip-row" id="team-seasons-chips"></div>
+      </section>
+
+    </div><!-- /#sidebar-batbowl -->
+
+    <!-- teams filters -->
+    <div id="sidebar-teams" style="display:none">
+
+      <section class="filters" id="team-top-filters">
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="label">Team</span>
+            <div style="display:flex;align-items:center;gap:.6rem">
+              <span id="team-logo-preview" style="display:none"></span>
+              <select class="team-single-select" id="team-picker">
+                <option value="-1">— pick a team —</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-group" style="flex:1;min-width:0">
+            <span class="label">Seasons</span>
+            <div class="chip-row" id="team-seasons-chips"></div>
+          </div>
         </div>
-      </div>
       <div class="filter-row">
         <div class="filter-group">
           <span class="label">Stage</span>
@@ -472,60 +514,101 @@ tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;o
             <option value="-1">All opponents</option>
           </select>
         </div>
-      </div>
-    </section>
-
-    <div class="kpi-strip" id="kpi-strip">
-      <div class="kpi-empty">Select a team above to see their stats</div>
-    </div>
-
-    <div class="subtab-bar" id="subtab-bar">
-      <button class="subtab-btn active" data-subtab="season">Team Performance</button>
-      <button class="subtab-btn" data-subtab="contributors">Contributors</button>
-    </div>
-
-    <section class="results-card" id="teams-results">
-      <div class="team-placeholder"><strong>Pick a team to get started</strong>Select a team using the filter above.</div>
-    </section>
-
-  </div><!-- /#teams-section -->
-
-  <!-- ===== FIELDING SECTION ===== -->
-  <div id="field-section" style="display:none">
-
-    <section class="filters" id="field-filters">
-      <div class="filter-row">
-        <div class="filter-group" style="flex:1;min-width:280px">
-          <span class="label">Seasons</span>
-          <div class="chip-row" id="field-seasons-chips"></div>
         </div>
-      </div>
-      <div class="filter-row">
-        <div class="filter-group">
-          <span class="label">Min dismissals</span>
-          <input type="number" id="min-dismissals" class="number-input" min="0" value="5" style="width:80px">
-        </div>
-        <div class="filter-group">
-          <span class="label">Dismissal type</span>
-          <div class="button-group" id="field-type-toggle">
-            <button data-value="all" class="active">All</button>
-            <button data-value="0">Catches</button>
-            <button data-value="1">Run-outs</button>
-            <button data-value="2">Stumpings</button>
+      </section>
+
+    </div><!-- /#sidebar-teams -->
+
+    <!-- fielding filters -->
+    <div id="sidebar-field" style="display:none">
+
+      <section class="filters" id="field-filters">
+        <div class="filter-row">
+          <div class="filter-group" style="flex:1;min-width:0">
+            <span class="label">Seasons</span>
+            <div class="chip-row" id="field-seasons-chips"></div>
           </div>
         </div>
-        <div class="filter-group">
-          <span class="label">Fielder's team</span>
-          <div class="dropdown" data-key="field_team"></div>
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="label">Min dismissals</span>
+            <input type="number" id="min-dismissals" class="number-input" min="0" value="5" style="width:80px">
+          </div>
+          <div class="filter-group">
+            <span class="label">Dismissal type</span>
+            <div class="button-group" id="field-type-toggle">
+              <button data-value="all" class="active">All</button>
+              <button data-value="0">Catches</button>
+              <button data-value="1">Run-outs</button>
+              <button data-value="2">Stumpings</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Fielder's team</span>
+            <div class="dropdown" data-key="field_team"></div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Opposition</span>
+            <div class="dropdown" data-key="field_opp"></div>
+          </div>
         </div>
-        <div class="filter-group">
-          <span class="label">Opposition</span>
-          <div class="dropdown" data-key="field_opp"></div>
+      </section>
+
+    </div><!-- /#sidebar-field -->
+
+    <!-- player -->
+    <div id="sidebar-player" style="display:none">
+      <p style="color:var(--text-muted);font-size:.8rem;padding:.5rem 0">Search for a player in the main area.</p>
+    </div>
+
+  </aside><!-- /.sidebar -->
+
+  <div class="content-area">
+
+    <!-- KPI strips (one per leaderboard tab) -->
+    <div id="bat-kpis"  class="kpi-strip" style="display:none"></div>
+    <div id="bowl-kpis" class="kpi-strip" style="display:none"></div>
+
+    <!-- ===== RESULTS ===== -->
+    <section class="results-card" id="main-results">
+      <div class="results-header">
+        <div class="results-count" id="results-count">Loading data…</div>
+        <div class="player-search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="player-search" class="player-search" placeholder="Find player…" autocomplete="off">
         </div>
+        <div class="muted-sep" id="results-meta"></div>
       </div>
+      <div class="table-wrap" id="table-wrap">
+        <div class="loading">Parsing data…</div>
+      </div>
+      <div class="footnote" id="footnote"></div>
     </section>
 
-    <section class="results-card" id="field-results">
+    <!-- ===== TEAMS SECTION ===== -->
+    <div id="teams-section" style="display:none">
+
+      <div class="kpi-strip" id="kpi-strip">
+        <div class="kpi-empty">Select a team above to see their stats</div>
+      </div>
+
+      <div class="subtab-bar" id="subtab-bar">
+        <button class="subtab-btn active" data-subtab="season">Team Performance</button>
+        <button class="subtab-btn" data-subtab="contributors">Contributors</button>
+      </div>
+
+      <section class="results-card" id="teams-results">
+        <div class="team-placeholder"><strong>Pick a team to get started</strong>Select a team using the filter above.</div>
+      </section>
+
+    </div><!-- /#teams-section -->
+
+    <!-- ===== FIELDING SECTION ===== -->
+    <div id="field-section" style="display:none">
+
+      <div id="field-kpis" class="kpi-strip"></div>
+
+      <section class="results-card" id="field-results">
       <div class="results-header">
         <div class="results-count" id="field-count">Loading…</div>
         <div class="player-search-wrap">
@@ -542,64 +625,65 @@ tbody td.player{font-weight:500;width:160px;max-width:160px;white-space:nowrap;o
         Run-out (Direct) = fielder who effected the dismissal. Run-out (Assist) = second fielder involved.
         Stumpings are wicketkeeper dismissals. Super overs excluded.
       </div>
-    </section>
+      </section>
 
-  </div><!-- /#field-section -->
+    </div><!-- /#field-section -->
 
-  <!-- ============================================================== -->
-  <!--  PLAYER PROFILE SECTION                                        -->
-  <!-- ============================================================== -->
-  <div id="player-section" style="display:none">
+    <!-- ============================================================== -->
+    <!--  PLAYER PROFILE SECTION                                        -->
+    <!-- ============================================================== -->
+    <div id="player-section" style="display:none">
 
-    <!-- Player search bar -->
-    <section class="filter-section" style="padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <label style="font-weight:600;font-size:.85rem">Player</label>
-      <div style="position:relative;flex:1;max-width:340px">
-        <input type="text" id="profile-search" class="number-input"
-               placeholder="Search player…"
-               style="width:100%;padding:.45rem .75rem;font-size:.9rem" autocomplete="off">
-        <div id="profile-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;
-             background:var(--surface);border:1px solid var(--border);border-radius:6px;
-             max-height:260px;overflow-y:auto;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.12)">
+      <!-- Player search bar -->
+      <section class="filter-section" style="padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <label style="font-weight:600;font-size:.85rem">Player</label>
+        <div style="position:relative;flex:1;max-width:340px">
+          <input type="text" id="profile-search" class="number-input"
+                 placeholder="Search player…"
+                 style="width:100%;padding:.45rem .75rem;font-size:.9rem" autocomplete="off">
+          <div id="profile-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;
+               background:var(--surface);border:1px solid var(--border);border-radius:6px;
+               max-height:260px;overflow-y:auto;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.12)">
+          </div>
+        </div>
+        <span id="profile-selected-name" style="font-weight:600;font-size:1rem;color:var(--accent)"></span>
+      </section>
+
+      <!-- Player filters (shown after a player is selected) -->
+      <div id="player-filter-bar" style="display:none;border-bottom:1px solid var(--border);background:#fafafa;padding:.6rem 1.5rem;display:none;flex-wrap:wrap;gap:1rem;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <span class="contrib-toggle-label">Team</span>
+          <div id="player-team-chips" style="display:flex;gap:.35rem;flex-wrap:wrap"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <span class="contrib-toggle-label">Season</span>
+          <div id="player-season-chips" style="display:flex;gap:.35rem;flex-wrap:wrap"></div>
         </div>
       </div>
-      <span id="profile-selected-name" style="font-weight:600;font-size:1rem;color:var(--accent)"></span>
-    </section>
 
-    <!-- Player filters (shown after a player is selected) -->
-    <div id="player-filter-bar" style="display:none;border-bottom:1px solid var(--border);background:#fafafa;padding:.6rem 1.5rem;display:none;flex-wrap:wrap;gap:1rem;align-items:flex-start">
-      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-        <span class="contrib-toggle-label">Team</span>
-        <div id="player-team-chips" style="display:flex;gap:.35rem;flex-wrap:wrap"></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-        <span class="contrib-toggle-label">Season</span>
-        <div id="player-season-chips" style="display:flex;gap:.35rem;flex-wrap:wrap"></div>
-      </div>
-    </div>
-
-    <!-- KPI strip -->
-    <div id="player-kpi" style="border-bottom:1px solid var(--border)">
-      <div class="kpi-empty">Search for a player above to view their profile</div>
-    </div>
-
-    <!-- Profile body -->
-    <div id="player-body" style="padding:1.25rem 1.5rem;display:none">
-
-      <!-- Stat cards row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem" id="player-cards">
+      <!-- KPI strip -->
+      <div id="player-kpi" style="border-bottom:1px solid var(--border)">
+        <div class="kpi-empty">Search for a player above to view their profile</div>
       </div>
 
-      <!-- Season-by-season table -->
-      <div class="contrib-card" id="player-season-card" style="margin-bottom:1rem">
-        <div class="contrib-card-header">Season by Season</div>
-        <div class="table-wrap" id="player-season-table"></div>
+      <!-- Profile body -->
+      <div id="player-body" style="padding:1.25rem 1.5rem;display:none">
+
+        <!-- Stat cards row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem" id="player-cards">
+        </div>
+
+        <!-- Season-by-season table -->
+        <div class="contrib-card" id="player-season-card" style="margin-bottom:1rem">
+          <div class="contrib-card-header">Season by Season</div>
+          <div class="table-wrap" id="player-season-table"></div>
+        </div>
+
       </div>
+    </div><!-- /#player-section -->
 
-    </div>
-  </div><!-- /#player-section -->
-
-</main>
+  </div><!-- /.content-area -->
+</div><!-- /.app-layout -->
 
 <script id="data" type="application/json">__DATA__</script>
 <script>__TEAM_LOGOS_JS__</script>
@@ -801,6 +885,17 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g,
     c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+function playerInitials(name) {
+  const parts = name.split(' ').filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  return name.slice(0,2).toUpperCase();
+}
+const _avColors = ['#1a2e4a:#60a5fa','#1a3422:#4ade80','#32201a:#fb923c','#2a1a34:#c084fc','#1a2432:#38bdf8','#2e1a1a:#f87171','#1a2e2e:#34d399','#2e2a1a:#fbbf24'];
+function playerAvStyle(name) {
+  const idx = [...name].reduce((a,c)=>a+c.charCodeAt(0),0) % _avColors.length;
+  const [bg,color] = _avColors[idx].split(':');
+  return `background:${bg};color:${color}`;
+}
 function fmt(v, d) { return v == null ? '&mdash;' : v.toFixed(d); }
 function fmtOvers(lb) {
   if (!lb) return '0.0';
@@ -883,6 +978,20 @@ tabBar.querySelectorAll('.tab-btn').forEach(btn => {
         inn2Btn.textContent = 'Bowling 2nd';
       }
     }
+
+    const sbBatBowl = document.getElementById('sidebar-batbowl');
+    const sbTeams   = document.getElementById('sidebar-teams');
+    const sbField   = document.getElementById('sidebar-field');
+    const sbPlayer  = document.getElementById('sidebar-player');
+    const batKpis   = document.getElementById('bat-kpis');
+    const bowlKpis  = document.getElementById('bowl-kpis');
+    if (sbBatBowl) sbBatBowl.style.display = (!isTeams && !isFielding && !isPlayer) ? '' : 'none';
+    if (sbTeams)   sbTeams.style.display   = isTeams    ? '' : 'none';
+    if (sbField)   sbField.style.display   = isFielding ? '' : 'none';
+    if (sbPlayer)  sbPlayer.style.display  = isPlayer   ? '' : 'none';
+    if (batKpis)   batKpis.style.display   = (activeTab === 'batting')  ? '' : 'none';
+    if (bowlKpis)  bowlKpis.style.display  = (activeTab === 'bowling')  ? '' : 'none';
+
     updateSubtitle();
     recompute();
   });
@@ -892,7 +1001,7 @@ tabBar.querySelectorAll('.tab-btn').forEach(btn => {
 /*  Season chips                                                        */
 /* ------------------------------------------------------------------ */
 const seasonsChips = document.getElementById('seasons-chips');
-seasons.forEach((s, idx) => {
+[...seasons].map((s, idx) => ({s, idx})).reverse().forEach(({s, idx}) => {
   const c = document.createElement('button');
   c.className = 'chip'; c.textContent = s; c.dataset.idx = idx; c.type = 'button';
   c.addEventListener('click', () => {
@@ -1374,6 +1483,29 @@ function renderBattingTable(rows, search) {
     ? `<strong>${visible.length.toLocaleString()}</strong> of ${all.toLocaleString()} player${all !== 1 ? 's' : ''} match these filters`
     : `<strong>${all.toLocaleString()}</strong> player${all !== 1 ? 's' : ''} match these filters`;
 
+  // KPI strip
+  const kpiEl = document.getElementById('bat-kpis');
+  if (kpiEl && visible.length > 0) {
+    const byRuns = [...visible].sort((a,b) => (b.runs||0) - (a.runs||0));
+    const bySR   = [...visible].filter(r => r.sr != null).sort((a,b) => (b.sr||0) - (a.sr||0));
+    const byAvg  = [...visible].filter(r => r.avg != null).sort((a,b) => (b.avg||0) - (a.avg||0));
+    const runsLeader = byRuns[0];
+    const srLeader   = bySR[0];
+    const avgLeader  = byAvg[0];
+    function kpiCard(cls, label, val, sub) {
+      return `<div class="kpi ${cls}"><div class="kpi-label">${label}</div><div class="kpi-val">${val}</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.25rem">${sub}</div></div>`;
+    }
+    kpiEl.innerHTML =
+      kpiCard('kpi-g', 'Most Runs',  runsLeader ? runsLeader.runs.toLocaleString() : '—', runsLeader ? escapeHtml(runsLeader.player) : '') +
+      kpiCard('kpi-t', 'Highest SR', srLeader   ? srLeader.sr.toFixed(1)           : '—', srLeader   ? escapeHtml(srLeader.player)   : '') +
+      kpiCard('kpi-r', 'Best Avg',   avgLeader  ? avgLeader.avg.toFixed(1)         : '—', avgLeader  ? escapeHtml(avgLeader.player)  : '') +
+      kpiCard('kpi-p', 'Players',    visible.length.toLocaleString(),                     'match these filters');
+    kpiEl.style.display = '';
+  } else if (kpiEl) {
+    kpiEl.innerHTML = '';
+    kpiEl.style.display = 'none';
+  }
+
   const wrap = document.getElementById('table-wrap');
   if (visible.length === 0) {
     wrap.innerHTML = all === 0
@@ -1395,17 +1527,27 @@ function renderBattingTable(rows, search) {
 
   let html = buildTableHeader(cols, batState);
   const cap = Math.min(rows2.length, 500);
+  const sortCol = batState.sortColumn;
+  const maxVal  = Math.max(...rows2.slice(0, cap).map(r => Math.abs(r[sortCol] || 0))) || 1;
+  function batCell(val, key, digits) {
+    const fmtd = digits != null ? fmt(val, digits) : (val != null ? val.toLocaleString() : '—');
+    if (key === sortCol) {
+      const w = Math.round((Math.abs(val||0) / Math.abs(maxVal)) * 80);
+      return `<td class="numeric sorted-col"><div class="num-hi">${fmtd}</div><div class="bar-wrap"><div class="bar" style="width:${w}px"></div></div></td>`;
+    }
+    return `<td class="numeric">${fmtd}</td>`;
+  }
   for (let i = 0; i < cap; i++) {
     const r = rows2[i];
     const pi = bat_to_player[r.bidx];
     html += `<tr>
       <td class="rank">${i + 1}</td>
-      <td class="player"><span class="player-link" data-pi="${pi}">${escapeHtml(r.player)}</span></td>
-      <td class="numeric">${r.runs.toLocaleString()}</td>
-      <td class="numeric">${r.balls.toLocaleString()}</td>
-      <td class="numeric">${r.outs.toLocaleString()}</td>
-      <td class="numeric">${fmt(r.sr, 1)}</td>
-      <td class="numeric">${fmt(r.avg, 1)}</td>
+      <td class="player"><div class="pcell"><div class="av" style="${playerAvStyle(r.player)}">${playerInitials(r.player)}</div><span class="player-link" data-pi="${pi}">${escapeHtml(r.player)}</span></div></td>
+      ${batCell(r.runs,  'runs',  null)}
+      ${batCell(r.balls, 'balls', null)}
+      ${batCell(r.outs,  'outs',  null)}
+      ${batCell(r.sr,    'sr',    1)}
+      ${batCell(r.avg,   'avg',   1)}
     </tr>`;
   }
   html += '</tbody></table>';
@@ -1426,6 +1568,26 @@ function renderBowlingTable(rows, search) {
   countEl.innerHTML = search
     ? `<strong>${visible.length.toLocaleString()}</strong> of ${all.toLocaleString()} bowler${all !== 1 ? 's' : ''} match these filters`
     : `<strong>${all.toLocaleString()}</strong> bowler${all !== 1 ? 's' : ''} match these filters`;
+
+  // KPI strip
+  const bowlKpiEl = document.getElementById('bowl-kpis');
+  if (bowlKpiEl && visible.length > 0) {
+    function bkCard(cls, label, val, sub) {
+      return `<div class="kpi ${cls}"><div class="kpi-label">${label}</div><div class="kpi-val">${val}</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.25rem">${sub}</div></div>`;
+    }
+    const withWkts = visible.filter(r => r.wickets > 0);
+    const wktsLeader  = [...visible].sort((a,b) => (b.wickets||0) - (a.wickets||0))[0];
+    const ecoLeader   = [...visible].filter(r => r.eco   != null).sort((a,b) => a.eco   - b.eco)[0];
+    const srLeader    = [...withWkts].filter(r => r.sr    != null).sort((a,b) => a.sr    - b.sr)[0];
+    const dotLeader   = [...visible].filter(r => r.dotPct!= null).sort((a,b) => b.dotPct - a.dotPct)[0];
+    bowlKpiEl.innerHTML =
+      bkCard('kpi-g', 'Most Wickets', wktsLeader ? wktsLeader.wickets : '—', wktsLeader ? escapeHtml(wktsLeader.player) : '') +
+      bkCard('kpi-t', 'Best Economy', ecoLeader  ? ecoLeader.eco.toFixed(2)   : '—', ecoLeader  ? escapeHtml(ecoLeader.player)  : '') +
+      bkCard('kpi-r', 'Best SR',      srLeader   ? srLeader.sr.toFixed(1)     : '—', srLeader   ? escapeHtml(srLeader.player)   : '') +
+      bkCard('kpi-p', 'Best Dot%',    dotLeader  ? dotLeader.dotPct.toFixed(1)+'%' : '—', dotLeader  ? escapeHtml(dotLeader.player)  : '');
+  } else if (bowlKpiEl) {
+    bowlKpiEl.innerHTML = '';
+  }
 
   const wrap = document.getElementById('table-wrap');
   if (visible.length === 0) {
@@ -1459,7 +1621,7 @@ function renderBowlingTable(rows, search) {
     const overs = fmtOvers(r.lballs);
     html += `<tr>
       <td class="rank">${i + 1}</td>
-      <td class="player"><span class="player-link" data-pi="${pi}">${escapeHtml(r.player)}</span></td>
+      <td class="player"><div class="pcell"><div class="av" style="${playerAvStyle(r.player)}">${playerInitials(r.player)}</div><span class="player-link" data-pi="${pi}">${escapeHtml(r.player)}</span></div></td>
       <td class="numeric">${r.matches}</td>
       <td class="numeric">${overs}</td>
       <td class="numeric">${r.runs.toLocaleString()}</td>
@@ -1572,7 +1734,7 @@ function setFootnote(tab) {
 
   // Season chips for teams tab
   const chipsEl = document.getElementById('team-seasons-chips');
-  seasons.forEach((s,idx) => {
+  [...seasons].map((s,idx) => ({s,idx})).reverse().forEach(({s,idx}) => {
     const c = document.createElement('button');
     c.className='chip'; c.textContent=s; c.dataset.idx=idx; c.type='button';
     c.addEventListener('click', () => {
@@ -2055,7 +2217,7 @@ function renderTeamContributors(ml) {
 (function() {
   // Season chips
   const chipsEl = document.getElementById('field-seasons-chips');
-  seasons.forEach((s, idx) => {
+  [...seasons].map((s, idx) => ({s, idx})).reverse().forEach(({s, idx}) => {
     const c = document.createElement('button');
     c.className='chip'; c.textContent=s; c.dataset.idx=idx; c.type='button';
     c.addEventListener('click', () => {
@@ -2173,6 +2335,25 @@ function renderFieldingTable(rows) {
     ? `<strong>${visible.length.toLocaleString()}</strong> of ${all.toLocaleString()} fielder${all!==1?'s':''} match these filters`
     : `<strong>${all.toLocaleString()}</strong> fielder${all!==1?'s':''} match these filters`;
 
+  // KPI strip
+  const fieldKpiEl = document.getElementById('field-kpis');
+  if (fieldKpiEl && visible.length > 0) {
+    function fkCard(cls, label, val, sub) {
+      return `<div class="kpi ${cls}"><div class="kpi-label">${label}</div><div class="kpi-val">${val}</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.25rem">${sub}</div></div>`;
+    }
+    const totalLeader = [...visible].sort((a,b) => (b.total||0)  - (a.total||0))[0];
+    const ctLeader    = [...visible].sort((a,b) => (b.ct||0)     - (a.ct||0))[0];
+    const roLeader    = [...visible].sort((a,b) => (b.ro||0)     - (a.ro||0))[0];
+    const stLeader    = [...visible].sort((a,b) => (b.st||0)     - (a.st||0))[0];
+    fieldKpiEl.innerHTML =
+      fkCard('kpi-g', 'Most Dismissals',       totalLeader ? totalLeader.total              : '—', totalLeader ? escapeHtml(totalLeader.player) : '') +
+      fkCard('kpi-t', 'Most Catches',          ctLeader    ? (ctLeader.ct    || '—')        : '—', ctLeader    ? escapeHtml(ctLeader.player)    : '') +
+      fkCard('kpi-r', 'Most Run-outs (Direct)',roLeader    ? (roLeader.ro    || '—')        : '—', roLeader    ? escapeHtml(roLeader.player)    : '') +
+      fkCard('kpi-p', 'Most Stumpings',        stLeader    ? (stLeader.st    || '—')        : '—', stLeader    ? escapeHtml(stLeader.player)    : '');
+  } else if (fieldKpiEl) {
+    fieldKpiEl.innerHTML = '';
+  }
+
   const wrap = document.getElementById('field-table-wrap');
   if (!visible.length) {
     wrap.innerHTML = all===0
@@ -2274,6 +2455,16 @@ function renderFieldingTable(rows) {
     fieldSection.style.display  = 'none';
     playerSection.style.display = '';
     batbowlEls.forEach(el => { el.style.display = 'none'; });
+    const _sbBB = document.getElementById('sidebar-batbowl');
+    const _sbT  = document.getElementById('sidebar-teams');
+    const _sbF  = document.getElementById('sidebar-field');
+    const _sbP  = document.getElementById('sidebar-player');
+    const _bk   = document.getElementById('bat-kpis');
+    if (_sbBB) _sbBB.style.display = 'none';
+    if (_sbT)  _sbT.style.display  = 'none';
+    if (_sbF)  _sbF.style.display  = 'none';
+    if (_sbP)  _sbP.style.display  = '';
+    if (_bk)   _bk.style.display   = 'none';
     updateSubtitle();
     // Populate search box and render
     searchInput.value = all_players[pi];
