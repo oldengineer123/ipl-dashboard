@@ -351,6 +351,165 @@ thead th.numeric.sorted{text-align:left}
 }
 main{display:none}
 
+/* =====================================================================
+   MOBILE / NARROW VIEWPORTS
+   ===================================================================== */
+
+/* Filter-toggle button is desktop-hidden, mobile-shown */
+.mobile-filter-toggle{display:none}
+
+/* ---- Tablet & small laptop: collapse sidebar into a stacked top panel */
+@media (max-width: 900px) {
+  /* Header grows to fit wrapped content - critical fix for the
+     58px-fixed-height overlap with sidebar */
+  header{
+    height:auto;min-height:48px;
+    padding:.5rem 1rem;align-items:center;gap:.5rem;
+  }
+  /* The tabs stay in their own row and scroll horizontally if needed */
+  .tab-bar{
+    order:5;width:100%;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .tab-bar::-webkit-scrollbar{display:none}
+  .tab-btn{padding:.4rem .85rem;font-size:.825rem;flex-shrink:0}
+  header .subtitle{display:none}
+
+  /* Filter toggle button visible on mobile */
+  .mobile-filter-toggle{
+    display:inline-flex;align-items:center;gap:.3rem;
+    background:var(--surface);border:1px solid var(--border-strong);
+    color:var(--text);font-size:.8125rem;padding:.42rem .7rem;
+    border-radius:8px;cursor:pointer;font-family:inherit;
+  }
+  .mobile-filter-toggle:hover{background:var(--hover)}
+  .mobile-filter-toggle .ft-arrow{transition:transform .15s;color:var(--text-muted)}
+  body.filters-open .mobile-filter-toggle .ft-arrow{transform:rotate(180deg)}
+  body.filters-open .mobile-filter-toggle{background:var(--accent-bg);border-color:var(--accent)}
+
+  /* App layout becomes column flow */
+  .app-layout{flex-direction:column;height:auto;overflow:visible}
+
+  /* Sidebar is HIDDEN by default on mobile - toggled by Filters button */
+  .sidebar{
+    display:none;
+    width:100%;min-width:0;
+    border-right:none;border-bottom:1px solid var(--border);
+    padding:.85rem 1rem;max-height:none;overflow:visible
+  }
+  body.filters-open .sidebar{display:flex;flex-direction:column}
+
+  .sidebar .filters{padding-bottom:.75rem;margin-bottom:.75rem}
+  .sidebar .filter-row{flex-direction:row;flex-wrap:wrap;align-items:flex-end;gap:.75rem}
+  .sidebar .chip-row{max-height:none}
+  .content-area{padding:1rem;overflow:visible}
+}
+
+/* ---- Phone-sized: tighten everything, full-width filters, larger inputs */
+@media (max-width: 768px) {
+  header{padding:.7rem 1rem}
+  header h1{font-size:1.0625rem;letter-spacing:-.005em}
+  header .subtitle{font-size:.7rem}
+  .text-button{font-size:.8125rem;padding:.45rem .55rem}
+
+  .sidebar{padding:.85rem .9rem}
+  .content-area{padding:.85rem .9rem 1.5rem;gap:.85rem}
+
+  /* Sub-tabs: scroll horizontally if they don't fit */
+  .subtab-bar{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .subtab-bar::-webkit-scrollbar{display:none}
+  .subtab-btn{flex-shrink:0;padding:.4rem .75rem;font-size:.78125rem}
+
+  /* KPI strip: tighter, 2 per row on phones */
+  .kpi-strip{gap:.4rem;margin-bottom:.6rem}
+  .kpi{min-width:calc(50% - .2rem);flex:1 1 calc(50% - .2rem);padding:.55rem .65rem .45rem}
+  .kpi::after{height:1px}
+  .kpi-val{font-size:1.15rem;line-height:1.05}
+  .kpi-label{font-size:.55rem;margin-bottom:.2rem;letter-spacing:.04em}
+
+  /* Filters: each control on its own row, full width */
+  .filters{padding:.95rem}
+  .filter-row{gap:.75rem;margin-bottom:.75rem}
+  .filter-group{width:100%!important;min-width:0!important;flex:1 1 100%!important}
+  .chip{padding:.5rem .8rem;font-size:.825rem}
+  .button-group{width:100%;display:flex}
+  .button-group button{flex:1;padding:.55rem .55rem;font-size:.8125rem}
+
+  /* Dropdowns full width, big enough fonts to avoid iOS zoom-on-focus */
+  .dropdown{width:100%}
+  .dropdown-toggle{width:100%;min-width:0;padding:.6rem .75rem;font-size:.875rem}
+  .dropdown-menu{width:100%;min-width:0;max-width:calc(100vw - 2rem);max-height:55vh}
+  .dropdown-item{padding:.55rem .85rem;font-size:.875rem}
+  .dropdown-search input{font-size:1rem}
+
+  .number-input{padding:.55rem .55rem;font-size:1rem}
+  #over-min,#over-max{width:72px!important}
+  #min-balls{width:96px!important}
+
+  .team-single-select{min-width:0;width:100%;font-size:.875rem;padding:.55rem .75rem}
+
+  /* Results card / table */
+  .results-card{border-radius:8px}
+  .results-header{padding:.7rem .95rem;gap:.55rem}
+  .results-count{font-size:.8125rem}
+  .player-search-wrap{width:100%}
+  .player-search,.player-search:focus{width:100%;font-size:1rem;padding-left:2rem}
+
+  .table-wrap{max-height:60vh;-webkit-overflow-scrolling:touch}
+  thead th{padding:.55rem .65rem;font-size:.62rem;letter-spacing:.04em}
+  tbody td{padding:.5rem .65rem;font-size:.8125rem}
+  tbody td.rank{width:34px}
+  tbody td.player{width:150px;max-width:150px}
+  .av{width:22px;height:22px;font-size:8px}
+  .pcell{gap:7px}
+  .num-hi{font-size:13px}
+
+  /* Player profile cards */
+  .player-stat-grid{grid-template-columns:1fr}
+  .player-stat-item{border-right:none!important;border-bottom:1px solid var(--border)!important}
+  .player-stat-item:last-child{border-bottom:none!important}
+  .player-stat-value{font-size:1.05rem}
+  .player-kpi-strip{flex-wrap:wrap}
+  .player-kpi-item{flex:1 1 50%;min-width:0;border-bottom:1px solid var(--border)}
+  .player-kpi-item:nth-child(2n){border-right:none}
+  .player-kpi-item:last-child{border-right:none}
+  .player-kpi-value{font-size:1.15rem}
+
+  /* Toss / contrib grids collapse to single column */
+  .toss-grid{grid-template-columns:1fr;gap:.75rem;margin-bottom:.75rem}
+  .toss-card{padding:1rem 1.1rem}
+  .toss-big{font-size:1.3rem}
+  .contrib-panels{grid-template-columns:1fr;gap:.75rem}
+  .contrib-card-header{padding:.6rem 1rem;font-size:.8125rem}
+  .contrib-toggle-row{padding:.6rem 1rem;gap:.55rem}
+
+  .footnote{padding:.7rem .95rem;font-size:.7rem;line-height:1.45}
+}
+
+/* ---- Small phones (portrait) */
+@media (max-width: 420px) {
+  header h1{font-size:1rem}
+  header .subtitle{display:none}
+  .text-button{padding:.4rem .45rem;font-size:.75rem}
+  .content-area{padding:.65rem .65rem 1.5rem}
+  .sidebar{padding:.75rem .65rem}
+  .filters{padding:.85rem .8rem}
+  .results-header{padding:.6rem .75rem;flex-direction:column;align-items:stretch}
+
+  /* KPIs stay 2-per-row even on smallest phones (inherited from 768px rule) */
+  .kpi{padding:.5rem .55rem .4rem}
+  .kpi-val{font-size:1.05rem}
+  .kpi-label{font-size:.52rem}
+
+  thead th{padding:.45rem .5rem;font-size:.6rem}
+  tbody td{padding:.45rem .5rem;font-size:.78125rem}
+  tbody td.player{width:120px;max-width:120px}
+  .av{width:20px;height:20px;font-size:7px}
+  .pcell{gap:6px}
+
+  .footnote{padding:.6rem .75rem}
+}
+
 </style>
 </head>
 <body>
@@ -368,6 +527,10 @@ main{display:none}
     <button class="tab-btn" data-tab="player">Player</button>
   </nav>
   <div class="subtitle" id="subtitle"></div>
+  <button class="mobile-filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="sidebar">
+    <span id="filter-toggle-label">Filters</span>
+    <span class="ft-arrow">▾</span>
+  </button>
   <button class="text-button" id="reset-button">Reset filters</button>
 </header>
 
@@ -3019,6 +3182,23 @@ function renderFieldingTable(rows) {
 /* ------------------------------------------------------------------ */
 recompute();
 
+})();
+</script>
+<script>
+/* ---- Mobile: Filters toggle (sidebar collapse / expand) ---- */
+(function(){
+  var btn = document.getElementById('filter-toggle');
+  if (!btn) return;
+  var label = document.getElementById('filter-toggle-label');
+  btn.addEventListener('click', function(){
+    var open = document.body.classList.toggle('filters-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (label) label.textContent = open ? 'Hide filters' : 'Filters';
+    if (open) {
+      var sb = document.querySelector('.sidebar');
+      if (sb) sb.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
 })();
 </script>
 </body>
